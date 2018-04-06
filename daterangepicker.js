@@ -804,7 +804,7 @@
 
                     //grey out the dates in other months displayed at beginning and end of this calendar
                     if (calendar[row][col].month() != calendar[1][1].month())
-                        classes.push('off');
+                        classes.push('invisible');
 
                     //don't allow selection of dates before the minimum date
                     if (this.minDate && calendar[row][col].isBefore(this.minDate, 'day'))
@@ -1299,74 +1299,74 @@
 
         clickDate: function(e) {
 
-            if (!$(e.target).hasClass('available')) return;
+            // if (!$(e.target).hasClass('available')) return;
 
-            var title = $(e.target).attr('data-title');
-            var row = title.substr(1, 1);
-            var col = title.substr(3, 1);
-            var cal = $(e.target).parents('.calendar');
-            var date = cal.hasClass('left') ? this.leftCalendar.calendar[row][col] : this.rightCalendar.calendar[row][col];
+            // var title = $(e.target).attr('data-title');
+            // var row = title.substr(1, 1);
+            // var col = title.substr(3, 1);
+            // var cal = $(e.target).parents('.calendar');
+            // var date = cal.hasClass('left') ? this.leftCalendar.calendar[row][col] : this.rightCalendar.calendar[row][col];
 
-            //
-            // this function needs to do a few things:
-            // * alternate between selecting a start and end date for the range,
-            // * if the time picker is enabled, apply the hour/minute/second from the select boxes to the clicked date
-            // * if autoapply is enabled, and an end date was chosen, apply the selection
-            // * if single date picker mode, and time picker isn't enabled, apply the selection immediately
-            // * if one of the inputs above the calendars was focused, cancel that manual input
-            //
+            // //
+            // // this function needs to do a few things:
+            // // * alternate between selecting a start and end date for the range,
+            // // * if the time picker is enabled, apply the hour/minute/second from the select boxes to the clicked date
+            // // * if autoapply is enabled, and an end date was chosen, apply the selection
+            // // * if single date picker mode, and time picker isn't enabled, apply the selection immediately
+            // // * if one of the inputs above the calendars was focused, cancel that manual input
+            // //
 
-            if (this.endDate || date.isBefore(this.startDate, 'day')) { //picking start
-                if (this.timePicker) {
-                    var hour = parseInt(this.container.find('.left .hourselect').val(), 10);
-                    if (!this.timePicker24Hour) {
-                        var ampm = this.container.find('.left .ampmselect').val();
-                        if (ampm === 'PM' && hour < 12)
-                            hour += 12;
-                        if (ampm === 'AM' && hour === 12)
-                            hour = 0;
-                    }
-                    var minute = parseInt(this.container.find('.left .minuteselect').val(), 10);
-                    var second = this.timePickerSeconds ? parseInt(this.container.find('.left .secondselect').val(), 10) : 0;
-                    date = date.clone().hour(hour).minute(minute).second(second);
-                }
-                this.endDate = null;
-                this.setStartDate(date.clone());
-            } else if (!this.endDate && date.isBefore(this.startDate)) {
-                //special case: clicking the same date for start/end,
-                //but the time of the end date is before the start date
-                this.setEndDate(this.startDate.clone());
-            } else { // picking end
-                if (this.timePicker) {
-                    var hour = parseInt(this.container.find('.right .hourselect').val(), 10);
-                    if (!this.timePicker24Hour) {
-                        var ampm = this.container.find('.right .ampmselect').val();
-                        if (ampm === 'PM' && hour < 12)
-                            hour += 12;
-                        if (ampm === 'AM' && hour === 12)
-                            hour = 0;
-                    }
-                    var minute = parseInt(this.container.find('.right .minuteselect').val(), 10);
-                    var second = this.timePickerSeconds ? parseInt(this.container.find('.right .secondselect').val(), 10) : 0;
-                    date = date.clone().hour(hour).minute(minute).second(second);
-                }
-                this.setEndDate(date.clone());
-                if (this.autoApply) {
-                  this.calculateChosenLabel();
-                  this.clickApply();
-                }
-            }
+            // if (this.endDate || date.isBefore(this.startDate, 'day')) { //picking start
+            //     if (this.timePicker) {
+            //         var hour = parseInt(this.container.find('.left .hourselect').val(), 10);
+            //         if (!this.timePicker24Hour) {
+            //             var ampm = this.container.find('.left .ampmselect').val();
+            //             if (ampm === 'PM' && hour < 12)
+            //                 hour += 12;
+            //             if (ampm === 'AM' && hour === 12)
+            //                 hour = 0;
+            //         }
+            //         var minute = parseInt(this.container.find('.left .minuteselect').val(), 10);
+            //         var second = this.timePickerSeconds ? parseInt(this.container.find('.left .secondselect').val(), 10) : 0;
+            //         date = date.clone().hour(hour).minute(minute).second(second);
+            //     }
+            //     this.endDate = null;
+            //     this.setStartDate(date.clone());
+            // } else if (!this.endDate && date.isBefore(this.startDate)) {
+            //     //special case: clicking the same date for start/end,
+            //     //but the time of the end date is before the start date
+            //     this.setEndDate(this.startDate.clone());
+            // } else { // picking end
+            //     if (this.timePicker) {
+            //         var hour = parseInt(this.container.find('.right .hourselect').val(), 10);
+            //         if (!this.timePicker24Hour) {
+            //             var ampm = this.container.find('.right .ampmselect').val();
+            //             if (ampm === 'PM' && hour < 12)
+            //                 hour += 12;
+            //             if (ampm === 'AM' && hour === 12)
+            //                 hour = 0;
+            //         }
+            //         var minute = parseInt(this.container.find('.right .minuteselect').val(), 10);
+            //         var second = this.timePickerSeconds ? parseInt(this.container.find('.right .secondselect').val(), 10) : 0;
+            //         date = date.clone().hour(hour).minute(minute).second(second);
+            //     }
+            //     this.setEndDate(date.clone());
+            //     if (this.autoApply) {
+            //       this.calculateChosenLabel();
+            //       this.clickApply();
+            //     }
+            // }
 
-            if (this.singleDatePicker) {
-                this.setEndDate(this.startDate);
-                if (!this.timePicker)
-                    this.clickApply();
-            }
+            // if (this.singleDatePicker) {
+            //     this.setEndDate(this.startDate);
+            //     if (!this.timePicker)
+            //         this.clickApply();
+            // }
 
-            this.updateView();
+            // this.updateView();
 
-            //This is to cancel the blur event handler if the mouse was in one of the inputs
-            e.stopPropagation();
+            // //This is to cancel the blur event handler if the mouse was in one of the inputs
+            // e.stopPropagation();
 
         },
 
